@@ -229,16 +229,17 @@ function craft() {
 
 
 function drag(ev) {
-	console.log("drag");
 	ev.dataTransfer.setData("text", ev.target.id);
 
 }
 function drop(ev) {
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
-    ev.target.appendChild(document.getElementById(data));
+	if(ev.target.attributes.id.value==='resources'||ev.target.attributes.id.value==='worktop')
+	{
+		ev.target.appendChild(document.getElementById(data));
+	}
 }
 function allowDrop(ev) {
-	console.log("allowDrop");
     ev.preventDefault();
 }
