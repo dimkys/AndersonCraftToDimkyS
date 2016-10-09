@@ -1,6 +1,3 @@
-//require('recipes');
-//require('resurse');
-//var colorReset=require('colorReset');
 var resurse=[
 	{
 		name: 'Человек'
