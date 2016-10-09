@@ -1,7 +1,7 @@
-require('recipes');
-require('resurse');
+//require('recipes');
+//require('resurse');
 //var colorReset=require('colorReset');
-/*var resurse=[
+var resurse=[
 	{
 		name: 'Человек'
 	},
@@ -67,7 +67,7 @@ var recipes = [
 		input: ['Ноже-мечь','Ноже-мечь'],
 		output: 'Обоюдо острый ноже-меченожмече'
 	}
-];*/
+];
 
 function colorReset (r) {
 	for(var i=0;i< r.length;i++) {
