@@ -1,5 +1,4 @@
-function Resurse() {
-    var resurse = [
+var resurse = [
         {
             input: ['Человек','Нож'],
             output: 'Человек-нож'
@@ -46,7 +45,5 @@ function Resurse() {
             output: 'Обоюдо острый ноже-меченожмече'
         }
     ];
-    return resurse;
-}
 
-global.Resurse=Resurse;
+global.resurse=resurse;

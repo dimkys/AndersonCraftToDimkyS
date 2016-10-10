@@ -1,5 +1,3 @@
-function Resurse() {
-
    var resurse =[
         {
             name: 'Человек'
@@ -20,6 +18,5 @@ function Resurse() {
             name: 'Веревка'
         }
     ];
-    return resurse;
-}
-global.Resurse=Resurse;
+
+global.resurse=resurse;
