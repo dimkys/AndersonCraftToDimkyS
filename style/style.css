@@ -1,12 +1,13 @@
 body {
 	font-family: "Times New Roman";
-	background-size: contain;
+	background-image: url(../picture/background.jpg);
+	background-size: 1000px 1200px;
 	background-position: center;
 }
 
 #hello {
 	text-decoration: none;
-	color: #006400;
+	color: #ECE0F8;
 	font-size: 20px;
 	margin: 10px 10px 10px 50px;
 	

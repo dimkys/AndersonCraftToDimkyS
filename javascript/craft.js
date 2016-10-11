@@ -1,23 +1,24 @@
 var resours=document.getElementById("resources");
 var worktop=document.getElementById("worktop");
 var selectRecipt=document.getElementById("selectRecipt");
+var idRes=0;
+var b=0;
 document.getElementById('buttonCraft').addEventListener('click', craft);
 
 add_resurses();
 function add_resurses()
 {
-	var b=0;
 	while(resurse.length>b)
 	{
 		var res=document.createElement('input');
 		res.type="button";
-		res.id=resurse[b].name;
+		res.id=idRes++;
 		res.draggable="true";
 		res.ondragstart=drag;
 		res.ondrop=drop;
 		res.onclick=onclick;
 		resources.appendChild(res);
-		res.value=res.id;
+		res.value=resurse[b].name;
 		b++;
 	}
     return console.log("Добавленно:"+b+" Элементов");
@@ -54,7 +55,16 @@ function craft() {
 	var arrSI=getArraySelectResurs(selectedItems);
 	var ValidRecipt=[];
 	var selItemLeng=selectedItems.length;
+
 	if(selItemLeng) {
+	    if(selItemLeng==1){
+	        if(confirm("Клонировать предмет?"))
+            {
+                resources.appendChild(add_resurs(selectedItems[0].value,true,drag,onclick));
+                ResetChildrenNoDel(worktop,resours);
+
+            }
+	    }
 		for(var recP=0;recP<recipes.length;recP++) {//выбираем рецепты где колличество рессурсов равно тому что положили
 			if(selItemLeng==recipes[recP].input.length){
 				ValidRecipt.push(recipes[recP]);
@@ -62,8 +72,6 @@ function craft() {
 		}
 		for(var ValRecP=0;ValRecP<ValidRecipt.length;ValRecP++) {//поиск нужного рецепта
 				if(equalsArr(ValidRecipt[ValRecP].input,arrSI)){
-                    console.log("Должно быть:"+ValidRecipt[ValRecP].output);
-
 					resurse+=[ValidRecipt[ValRecP].output];
 
 					resources.appendChild(add_resurs(ValidRecipt[ValRecP].output,true,drag,onclick));//добовляем новый элемент/рессурс
@@ -71,6 +79,7 @@ function craft() {
 					selectRecipt.style.display="none";
 					colorReset(resours.querySelectorAll('input'));//убираем подсветку
 					colorReset(selectedItems);//убираем подсветку
+                    ResetChildrenAndDel(worktop,resours);
 					return;
 				}
 		}
@@ -103,7 +112,13 @@ function craft() {
 				}
 		}*/
 	}else{
-		alert("Умный что ли, из воздуха крафтим?");
+        if(confirm("Умный что ли, из воздуха создавать?"))
+        {
+            resources.appendChild(add_resurs("Воздух",true,drag,onclick));
+            colorReset(resours.querySelectorAll('input'));//убираем подсветку
+            colorReset(selectedItems);//убираем подсветку
+            selectRecipt.style.display="none";
+        }
 	}
 };
 
@@ -119,7 +134,7 @@ function onclick (event) {//вывод рецептов для выбранно�
 	{
 		for (var j = 0 ; j < recipes[i].input.length; j++)
 		{
-			if(recipes[i].input[j]===event.currentTarget.id){
+			if(recipes[i].input[j]===event.currentTarget.value){
 				for (var k = 0 ; k < recipes[i].input.length;k++)
 				{
 					if(k==recipes[i].input.length-1) {
@@ -132,9 +147,10 @@ function onclick (event) {//вывод рецептов для выбранно�
 				selectRecipt.appendChild(
 				    add_resurs(str,false,undefined,onclickrecipt,recipes[i].output));//добовляем новый рецепт в подсказку
 				str='';
+                selectRecipt.style.display="block ";
 				break;
 			}
 		}
 	}
-	selectRecipt.style.display="block ";
+
 };
