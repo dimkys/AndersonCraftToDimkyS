@@ -1,4 +1,4 @@
-var resurse = [
+var recipes = [
         {
             input: ['Человек','Нож'],
             output: 'Человек-нож'
@@ -45,5 +45,3 @@ var resurse = [
             output: 'Обоюдо острый ноже-меченожмече'
         }
     ];
-
-global.resurse=resurse;

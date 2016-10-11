@@ -1,91 +1,10 @@
-var resurse=[
-	{
-		name: 'Человек'
-	},
-	{
-		name: 'Нож'
-	},
-	{
-		name: 'Меч'
-	},
-	{
-		name: 'Камень'
-	},
-	{
-		name: 'Рак'
-	},
-	{
-		name: 'Веревка'
-	}
-];
-var recipes = [
-	{
-		input: ['Человек','Нож'],
-		output: 'Человек-нож'
-	},
-	{
-		input: ['Человек','Меч'],
-		output: 'Человек-Меч'
-	},
-	{
-		input: ['Человек-нож','Человек'],
-		output: 'Труп'
-	},
-	{
-		input: ['Меч','Камень'],
-		output: 'Ну вот тупой меч'
-	},
-	{
-		input: ['Ну вот тупой меч','Камень'],
-		output: 'Тебе было недостаточно тупо?'
-	},
-	{
-		input: ['Труп','Человек'],
-		output: 'mmm fresh meat!!!'
-	},
-	{
-		input: ['Рак','Человек'],
-		output: 'Dota player'
-	},
-	{
-		input: ['Камень','Человек','Веревка'],
-		output: 'Утопленник'
-	},
-	{
-		input: ['Нож','Меч'],
-		output: 'Ноже-мечь'
-	},
-	{
-		input: ['Нож','Меч','Труп'],
-		output: 'Труп с Ноже-мечем в спине'
-	}
-	,
-	{
-		input: ['Ноже-мечь','Ноже-мечь'],
-		output: 'Обоюдо острый ноже-меченожмече'
-	}
-];
-
-function colorReset (r) {
-	for(var i=0;i< r.length;i++) {
-		r[i].style.backgroundColor = "#000000";
-	}
-}
-
 var resours=document.getElementById("resources");
-resources.ondrop=drop;
-resources.ondragover=allowDrop;
-
 var worktop=document.getElementById("worktop");
-worktop.ondrop=drop;
-worktop.ondragover=allowDrop;
 var selectRecipt=document.getElementById("selectRecipt");
-
 document.getElementById('buttonCraft').addEventListener('click', craft);
 
-
-add_resurs();
-function add_resurs()
+add_resurses();
+function add_resurses()
 {
 	var b=0;
 	while(resurse.length>b)
@@ -118,73 +37,43 @@ function onclickrecipt(event) {
 				var recc=recipes[i].input[recInp];
 				for(var itm=0;itm< resou.length;itm++) {//убираем подсветку
 					if (resou[itm].value===recc){
-						console.log("da");
 						resou[itm].style.backgroundColor="#FF0000";
 						}
 				}
 				for(var itm=0;itm< work.length;itm++) {//убираем подсветку
 					if (work[itm].value===recc){
-						console.log("da");
 						work[itm].style.backgroundColor="#FF0000";
 					}
 				}
 			}
 		}
 	}
-}
-
-function onclick (event) {
-	removeChildren(selectRecipt);
-	var str="";
-	for (var i = 0 ; i < recipes.length; i++)
-	{
-
-		for (var j = 0 ; j < recipes[i].input.length; j++)
-		{
-			if(recipes[i].input[j]===event.currentTarget.id){
-				for (var k = 0 ; k < recipes[i].input.length;k++)
-				{
-					if(k==recipes[i].input.length-1) {
-						str += recipes[i].input[k]+"=";
-					}else{
-						str += recipes[i].input[k] + "+";
-					}
-				}
-				str+=recipes[i].output+"";
-				var res=document.createElement('input');
-				res.type="button";
-				res.id+=str;
-				res.out=recipes[i].output;
-				res.onclick=onclickrecipt;
-				res.value=res.id;
-				selectRecipt.appendChild(res);
-				str='';
-
-			}
-
-		}
-	//alert(event.currentTarget.id);
-	}
-	selectRecipt.style.display="block ";
-}
-
-function removeChildren(elem) {
-	for (var k = elem.childNodes.length-1; k >=0; k--) {
-		try{
-		elem.removeChild(elem.childNodes[k]);
-		}catch (e){
-			console.log(e);
-		}
-	}
-}
-
-
-
+};
 
 function craft() {
 	var selectedItems = worktop.querySelectorAll('input');
-	if(selectedItems.length) {		
-		for (var i = 0 ; i < selectedItems.length; i++) {
+	var arrSI=getArraySelectResurs(selectedItems);
+	var ValidRecipt=[];
+	var selItemLeng=selectedItems.length;
+	if(selItemLeng) {
+		for(var recP=0;recP<recipes.length;recP++) {//выбираем рецепты где колличество рессурсов равно тому что положили
+			if(selItemLeng==recipes[recP].input.length){
+				ValidRecipt.push(recipes[recP]);
+			}
+		}
+		for(var ValRecP=0;ValRecP<ValidRecipt.length;ValRecP++) {//поиск нужного рецепта
+				if(equalsArr(ValidRecipt[ValRecP].input,arrSI)){
+					resurse+=[recipes[ValRecP].output];
+					resources.appendChild(add_resurs(recipes[ValRecP].output,true,drag,onclick));//добовляем новый элемент/рессурс
+					selectRecipt.style.display="none";
+					colorReset(resours.querySelectorAll('input'));//убираем подсветку
+					colorReset(selectedItems);//убираем подсветку
+					return;
+				}
+		}
+
+
+		/*for (var i = 0 ; i < selectedItems.length; i++) {
 				for(var a=0;a<recipes.length;a++)
 				{
 					var sum=0;
@@ -198,18 +87,8 @@ function craft() {
 								if(sum==selectedItems.length)
 								{
 									console.log("Скрафтил");
-									var res=document.createElement('input');
-									res.type="button";
-									res.id+=recipes[a].output;
-									res.draggable="true";
-									res.ondragstart=drag;
-									res.ondrop=drop;
-									res.onclick=onclick;
-									resources.appendChild(res);
-									res.value=res.id;
 									resurse+=[recipes[a].output];
-									console.log("Добавленно:"+b);
-
+									resources.appendChild(add_resurs(recipes[a].output,true,drag,onclick));//добовляем новый элемент/рессурс
 									selectRecipt.style.display="none";
 									colorReset(resours.querySelectorAll('input'));//убираем подсветку
 									colorReset(selectedItems);//убираем подсветку
@@ -221,25 +100,39 @@ function craft() {
 					 }else{
 					 }
 				}
-		}
+		}*/
 	}else{
 		alert("Умный что ли, из воздуха крафтим?");
 	}
-}
+};
 
 
-function drag(ev) {
-	ev.dataTransfer.setData("text", ev.target.id);
 
-}
-function drop(ev) {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-	if(ev.target.attributes.id.value==='resources'||ev.target.attributes.id.value==='worktop')
+
+
+
+function onclick (event) {//вывод рецептов для выбранного элемента
+	removeChildren(selectRecipt);
+	var str="";
+	for (var i = 0 ; i < recipes.length; i++)
 	{
-		ev.target.appendChild(document.getElementById(data));
+		for (var j = 0 ; j < recipes[i].input.length; j++)
+		{
+			if(recipes[i].input[j]===event.currentTarget.id){
+				for (var k = 0 ; k < recipes[i].input.length;k++)
+				{
+					if(k==recipes[i].input.length-1) {
+						str += recipes[i].input[k]+"=";
+					}else{
+						str += recipes[i].input[k] + "+";
+					}
+				}
+				str+=recipes[i].output+"";
+				selectRecipt.appendChild(add_resurs(str,false,undefined,onclickrecipt,recipes[i].output));//добовляем новый рецепт в подсказку
+				str='';
+				break;
+			}
+		}
 	}
-}
-function allowDrop(ev) {
-    ev.preventDefault();
-}
+	selectRecipt.style.display="block ";
+};

@@ -18,5 +18,3 @@
             name: 'Веревка'
         }
     ];
-
-global.resurse=resurse;
