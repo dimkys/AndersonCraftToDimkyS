@@ -21,12 +21,14 @@ function equalsArr(arr, arr2){
     for( var i = 0; i < arr.length; i++ ){
         for( var j = 0; j < arr2.length; j++ ){
             if(arr[i] === arr2[j]){
+                console.log(arr[i]+"  "+arr2[j]);
+
                 on++;
                 break;
             }
-
         }
     }
+    //console.log(on+"  "+arr.length);
     if(on==arr.length){
          return true;
     }else{

@@ -18,12 +18,11 @@ function add_resurses()
 		res.onclick=onclick;
 		resources.appendChild(res);
 		res.value=res.id;
-		console.log("Добавленно:"+b);
 		b++;
 	}
+    return console.log("Добавленно:"+b+" Элементов");
 }
 function onclickrecipt(event) {
-
 	var resou = resours.querySelectorAll('input');
 	colorReset(resou);
 	var work= worktop.querySelectorAll('input');
@@ -35,12 +34,12 @@ function onclickrecipt(event) {
 			for (var recInp= 0 ; recInp < recipes[i].input.length; recInp++)//роемся в ингредиентах для данног рецепта
 			{
 				var recc=recipes[i].input[recInp];
-				for(var itm=0;itm< resou.length;itm++) {//убираем подсветку
+				for(var itm=0;itm< resou.length;itm++) {//добавляем подсвет
 					if (resou[itm].value===recc){
 						resou[itm].style.backgroundColor="#FF0000";
 						}
 				}
-				for(var itm=0;itm< work.length;itm++) {//убираем подсветку
+				for(var itm=0;itm< work.length;itm++) {//добавляем подсвет
 					if (work[itm].value===recc){
 						work[itm].style.backgroundColor="#FF0000";
 					}
@@ -63,16 +62,18 @@ function craft() {
 		}
 		for(var ValRecP=0;ValRecP<ValidRecipt.length;ValRecP++) {//поиск нужного рецепта
 				if(equalsArr(ValidRecipt[ValRecP].input,arrSI)){
-					resurse+=[recipes[ValRecP].output];
-					resources.appendChild(add_resurs(recipes[ValRecP].output,true,drag,onclick));//добовляем новый элемент/рессурс
+                    console.log("Должно быть:"+ValidRecipt[ValRecP].output);
+
+					resurse+=[ValidRecipt[ValRecP].output];
+
+					resources.appendChild(add_resurs(ValidRecipt[ValRecP].output,true,drag,onclick));//добовляем новый элемент/рессурс
+
 					selectRecipt.style.display="none";
 					colorReset(resours.querySelectorAll('input'));//убираем подсветку
 					colorReset(selectedItems);//убираем подсветку
 					return;
 				}
 		}
-
-
 		/*for (var i = 0 ; i < selectedItems.length; i++) {
 				for(var a=0;a<recipes.length;a++)
 				{
@@ -128,7 +129,8 @@ function onclick (event) {//вывод рецептов для выбранно�
 					}
 				}
 				str+=recipes[i].output+"";
-				selectRecipt.appendChild(add_resurs(str,false,undefined,onclickrecipt,recipes[i].output));//добовляем новый рецепт в подсказку
+				selectRecipt.appendChild(
+				    add_resurs(str,false,undefined,onclickrecipt,recipes[i].output));//добовляем новый рецепт в подсказку
 				str='';
 				break;
 			}
