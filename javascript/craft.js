@@ -1,29 +1,29 @@
 var resours=document.getElementById("resources");
 var worktop=document.getElementById("worktop");
 var selectRecipt=document.getElementById("selectRecipt");
+var idRes=0;
+var b=0;
 document.getElementById('buttonCraft').addEventListener('click', craft);
 
 add_resurses();
 function add_resurses()
 {
-	var b=0;
 	while(resurse.length>b)
 	{
 		var res=document.createElement('input');
 		res.type="button";
-		res.id=resurse[b].name;
+		res.id=idRes++;
 		res.draggable="true";
 		res.ondragstart=drag;
 		res.ondrop=drop;
 		res.onclick=onclick;
 		resources.appendChild(res);
-		res.value=res.id;
-		console.log("Добавленно:"+b);
+		res.value=resurse[b].name;
 		b++;
 	}
+    return console.log("Добавленно:"+b+" Элементов");
 }
 function onclickrecipt(event) {
-
 	var resou = resours.querySelectorAll('input');
 	colorReset(resou);
 	var work= worktop.querySelectorAll('input');
@@ -35,12 +35,12 @@ function onclickrecipt(event) {
 			for (var recInp= 0 ; recInp < recipes[i].input.length; recInp++)//роемся в ингредиентах для данног рецепта
 			{
 				var recc=recipes[i].input[recInp];
-				for(var itm=0;itm< resou.length;itm++) {//убираем подсветку
+				for(var itm=0;itm< resou.length;itm++) {//добавляем подсвет
 					if (resou[itm].value===recc){
 						resou[itm].style.backgroundColor="#FF0000";
 						}
 				}
-				for(var itm=0;itm< work.length;itm++) {//убираем подсветку
+				for(var itm=0;itm< work.length;itm++) {//добавляем подсвет
 					if (work[itm].value===recc){
 						work[itm].style.backgroundColor="#FF0000";
 					}
@@ -55,7 +55,16 @@ function craft() {
 	var arrSI=getArraySelectResurs(selectedItems);
 	var ValidRecipt=[];
 	var selItemLeng=selectedItems.length;
+
 	if(selItemLeng) {
+	    if(selItemLeng==1){
+	        if(confirm("Клонировать предмет?"))
+            {
+                resources.appendChild(add_resurs(selectedItems[0].value,true,drag,onclick));
+                ResetChildrenNoDel(worktop,resours);
+
+            }
+	    }
 		for(var recP=0;recP<recipes.length;recP++) {//выбираем рецепты где колличество рессурсов равно тому что положили
 			if(selItemLeng==recipes[recP].input.length){
 				ValidRecipt.push(recipes[recP]);
@@ -63,16 +72,17 @@ function craft() {
 		}
 		for(var ValRecP=0;ValRecP<ValidRecipt.length;ValRecP++) {//поиск нужного рецепта
 				if(equalsArr(ValidRecipt[ValRecP].input,arrSI)){
-					resurse+=[recipes[ValRecP].output];
-					resources.appendChild(add_resurs(recipes[ValRecP].output,true,drag,onclick));//добовляем новый элемент/рессурс
+					resurse+=[ValidRecipt[ValRecP].output];
+
+					resources.appendChild(add_resurs(ValidRecipt[ValRecP].output,true,drag,onclick));//добовляем новый элемент/рессурс
+
 					selectRecipt.style.display="none";
 					colorReset(resours.querySelectorAll('input'));//убираем подсветку
 					colorReset(selectedItems);//убираем подсветку
+                    ResetChildrenAndDel(worktop,resours);
 					return;
 				}
 		}
-
-
 		/*for (var i = 0 ; i < selectedItems.length; i++) {
 				for(var a=0;a<recipes.length;a++)
 				{
@@ -102,7 +112,13 @@ function craft() {
 				}
 		}*/
 	}else{
-		alert("Умный что ли, из воздуха крафтим?");
+        if(confirm("Умный что ли, из воздуха создавать?"))
+        {
+            resources.appendChild(add_resurs("Воздух",true,drag,onclick));
+            colorReset(resours.querySelectorAll('input'));//убираем подсветку
+            colorReset(selectedItems);//убираем подсветку
+            selectRecipt.style.display="none";
+        }
 	}
 };
 
@@ -118,7 +134,7 @@ function onclick (event) {//вывод рецептов для выбранно�
 	{
 		for (var j = 0 ; j < recipes[i].input.length; j++)
 		{
-			if(recipes[i].input[j]===event.currentTarget.id){
+			if(recipes[i].input[j]===event.currentTarget.value){
 				for (var k = 0 ; k < recipes[i].input.length;k++)
 				{
 					if(k==recipes[i].input.length-1) {
@@ -128,11 +144,13 @@ function onclick (event) {//вывод рецептов для выбранно�
 					}
 				}
 				str+=recipes[i].output+"";
-				selectRecipt.appendChild(add_resurs(str,false,undefined,onclickrecipt,recipes[i].output));//добовляем новый рецепт в подсказку
+				selectRecipt.appendChild(
+				    add_resurs(str,false,undefined,onclickrecipt,recipes[i].output));//добовляем новый рецепт в подсказку
 				str='';
+                selectRecipt.style.display="block ";
 				break;
 			}
 		}
 	}
-	selectRecipt.style.display="block ";
+
 };
