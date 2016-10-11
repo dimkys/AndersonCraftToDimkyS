@@ -39,15 +39,14 @@ function equalsArr(arr, arr2){
 
     if(arr.length != arr2.length) return false;
     var on = 0;
-    for( var i = 0; i < arr.length; i++ ){
-        for( var j = 0; j < arr2.length; j++ ){
-            if(arr[i] === arr2[j]){
+    for( var i = 0; i < arr.length; i++ ) {
+        for (var j = 0; j < arr2.length; j++) {
+            if (arr[i] === arr2[j]) {
                 on++;
                 break;
             }
         }
     }
-    //console.log(on+"  "+arr.length);
     if(on==arr.length){
          return true;
     }else{
@@ -55,7 +54,7 @@ function equalsArr(arr, arr2){
     }
 };
 
-function add_resurs(id,draggable,ondragstart,onClickEvFun,output)
+function add_resurs(id,draggable,ondragstart,output)
 {
         var res=document.createElement('input');
         res.type="button";
@@ -63,7 +62,6 @@ function add_resurs(id,draggable,ondragstart,onClickEvFun,output)
         res.draggable=draggable;
         res.ondragstart=ondragstart;
         res.ondrop=drop;
-        res.onclick=onClickEvFun;
         res.value=id;
         res.out=output;
         return res;

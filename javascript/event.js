@@ -1,9 +1,15 @@
 resources.ondrop=drop;
 resources.ondragover=allowDrop;
+
 worktop.ondrop=drop;
 worktop.ondragover=allowDrop;
+
 buttonCraft.ondragover=allowDrop;
 buttonCraft.ondrop=drop;
+/*
+resources.addEventListener('click',onclick);
+worktop.addEventListener('click',onclick);
+selectRecipt.addEventListener('click',onclick);*/
 function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
 
