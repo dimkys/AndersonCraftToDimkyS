@@ -1,6 +1,6 @@
 var http = require('http');
-var static = require('node-static');
-var file = new static.Server('.');
+var statics = require('node-static');
+var file = new statics.Server('.');
 
 function accept(req, res){
     file.serve(req, res);
